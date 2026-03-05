@@ -55,39 +55,24 @@ function App() {
     return { 0: 'You', 1: 'Computer' } as Record<Player, string>
   }, [gameMode])
 
-  const winLabel = useMemo(() => {
-    if (gameMode === 'pvp') return (p: Player) => `${playerLabel[p]} wins!`
-    return (p: Player) => (p === 0 ? 'You win!' : 'Computer wins!')
-  }, [gameMode])
-
-  const statusWinLabel = useMemo(() => {
-    if (gameMode === 'pvp') return (p: Player) => `${playerLabel[p]} wins the game.`
-    return (p: Player) => (p === 0 ? 'You win the game.' : 'Computer wins the game.')
+  const winPlayerName = useMemo(() => {
+    if (gameMode === 'pvp') return { 0: 'Player 1', 1: 'Player 2' } as Record<Player, string>
+    return { 0: 'You', 1: 'Computer' } as Record<Player, string>
   }, [gameMode])
 
   const turnText = useMemo(() => {
-    if (result === 'win' && winner !== null) {
-      return winLabel(winner)
-    }
-    if (result === 'draw') {
-      return "It's a draw!"
-    }
+    if (result !== 'playing') return ''
     return gameMode === 'pvc' && currentPlayer === 0
       ? 'Your turn'
       : gameMode === 'pvc' && currentPlayer === 1
         ? "Computer's turn"
         : `${turnLabel[currentPlayer]}'s turn`
-  }, [currentPlayer, result, winner, turnLabel, winLabel, gameMode])
+  }, [currentPlayer, result, turnLabel, gameMode])
 
   const statusText = useMemo(() => {
-    if (result === 'win' && winner !== null) {
-      return statusWinLabel(winner)
-    }
-    if (result === 'draw') {
-      return 'Board is full. The game ends in a draw.'
-    }
+    if (result !== 'playing') return ''
     return statusMessage
-  }, [result, winner, statusMessage, statusWinLabel])
+  }, [result, statusMessage])
 
   function applyMove(nextBoard: Board, rowPlaced: number, col: number, player: Player) {
     setBoard(nextBoard)
@@ -221,7 +206,9 @@ function App() {
 
       <section className="info-panel">
         <div className="turn-row">
-          <span className={`turn-indicator ${playerColorClass[currentPlayer]}`} />
+          {result === 'playing' && (
+            <span className={`turn-indicator ${playerColorClass[currentPlayer]}`} />
+          )}
           <p>{turnText}</p>
         </div>
         <div className="status-message" aria-live="polite">
@@ -229,29 +216,63 @@ function App() {
         </div>
       </section>
 
-      <section
-        className="board"
-        style={{ gridTemplateColumns: `repeat(${gameConfig.cols}, 1fr)` }}
-        aria-label="Connect 4 board"
-      >
-        {board.map((row, rowIndex) =>
-          row.map((cell, colIndex) => (
-            <button
-              key={`${rowIndex}-${colIndex}`}
-              className="cell"
-              onClick={() => handleColumnClick(colIndex)}
-              disabled={result !== 'playing' || isComputerTurn}
-              aria-label={`Row ${rowIndex + 1}, Column ${colIndex + 1}`}
-            >
-              <span
-                className={`disc ${
-                  cell === null ? 'disc-empty' : playerColorClass[cell]
-                }`}
-              />
-            </button>
-          )),
+      <div className="board-wrapper">
+        <section
+          className={`board ${result !== 'playing' ? 'board-frozen' : ''}`}
+          style={{ gridTemplateColumns: `repeat(${gameConfig.cols}, 1fr)` }}
+          aria-label="Connect 4 board"
+        >
+          {board.map((row, rowIndex) =>
+            row.map((cell, colIndex) => (
+              <button
+                key={`${rowIndex}-${colIndex}`}
+                className="cell"
+                onClick={() => handleColumnClick(colIndex)}
+                disabled={result !== 'playing' || isComputerTurn}
+                aria-label={`Row ${rowIndex + 1}, Column ${colIndex + 1}`}
+              >
+                <span
+                  className={`disc ${
+                    cell === null ? 'disc-empty' : playerColorClass[cell]
+                  }`}
+                />
+              </button>
+            )),
+          )}
+        </section>
+
+        {result !== 'playing' && (
+          <div
+            className="board-overlay"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="game-over-title"
+          >
+            <div className="game-over-modal">
+              <h2 id="game-over-title" className="game-over-title">
+                {result === 'win' && winner !== null ? (
+                  <>
+                    <span
+                      className={`game-over-indicator ${playerColorClass[winner]}`}
+                      aria-hidden="true"
+                    />
+                    <span
+                      className={
+                        winner === 0 ? 'game-over-title-red' : 'game-over-title-yellow'
+                      }
+                    >
+                      {winPlayerName[winner]}
+                    </span>
+                    {winner === 0 && gameMode === 'pvc' ? ' win!' : ' wins!'}
+                  </>
+                ) : (
+                  "It's a draw!"
+                )}
+              </h2>
+            </div>
+          </div>
         )}
-      </section>
+      </div>
 
       <div className="game-actions">
         <button type="button" className="restart-button" onClick={restartGame}>

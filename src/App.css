@@ -1,0 +1,90 @@
+.app {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  text-align: center;
+  display: grid;
+  gap: 1rem;
+}
+
+.info-panel {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.turn-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: 600;
+}
+
+.turn-indicator {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1px solid #444;
+}
+
+.status-message {
+  min-height: 1.5rem;
+  color: #b45309;
+  font-size: 0.95rem;
+}
+
+.board {
+  display: grid;
+  gap: 0.45rem;
+  background: #1d4ed8;
+  padding: 0.6rem;
+  border-radius: 0.6rem;
+}
+
+.cell {
+  appearance: none;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  border-radius: 50%;
+}
+
+.cell:disabled {
+  cursor: default;
+}
+
+.disc {
+  width: min(68px, 9vw);
+  height: min(68px, 9vw);
+  border-radius: 50%;
+  display: block;
+  border: 2px solid rgba(0, 0, 0, 0.25);
+}
+
+.disc-empty {
+  background: #e5e7eb;
+}
+
+.disc-red {
+  background: #dc2626;
+}
+
+.disc-yellow {
+  background: #facc15;
+}
+
+.restart-button {
+  justify-self: center;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.6rem 1rem;
+  font-weight: 600;
+  background: #111827;
+  color: #fff;
+  cursor: pointer;
+}
+
+.restart-button:hover {
+  background: #1f2937;
+}

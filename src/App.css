@@ -74,8 +74,14 @@
   background: #facc15;
 }
 
+.game-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
 .restart-button {
-  justify-self: center;
   border: none;
   border-radius: 0.5rem;
   padding: 0.6rem 1rem;
@@ -87,4 +93,63 @@
 
 .restart-button:hover {
   background: #1f2937;
+}
+
+.change-mode-button {
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.6rem 1rem;
+  font-weight: 600;
+  background: #1d4ed8;
+  color: #fff;
+  cursor: pointer;
+}
+
+.change-mode-button:hover {
+  background: #2563eb;
+}
+
+.mode-select {
+  display: grid;
+  gap: 1rem;
+  justify-items: center;
+}
+
+.mode-select-title {
+  margin: 0;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.mode-options {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.mode-button {
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: 2px solid #374151;
+  background: #1f2937;
+  color: #e5e7eb;
+}
+
+.mode-button:hover {
+  border-color: #4b5563;
+  background: #374151;
+}
+
+.mode-button-active {
+  border-color: #3b82f6;
+  background: #1d4ed8;
+  color: #fff;
+}
+
+.mode-button-active:hover {
+  border-color: #60a5fa;
+  background: #2563eb;
 }
